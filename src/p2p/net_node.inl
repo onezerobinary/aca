@@ -1,21 +1,21 @@
 // Copyright (c) 2014, AEON, The Monero Project
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification, are
 // permitted provided that the following conditions are met:
-// 
+//
 // 1. Redistributions of source code must retain the above copyright notice, this list of
 //    conditions and the following disclaimer.
-// 
+//
 // 2. Redistributions in binary form must reproduce the above copyright notice, this list
 //    of conditions and the following disclaimer in the documentation and/or other
 //    materials provided with the distribution.
-// 
+//
 // 3. Neither the name of the copyright holder nor the names of its contributors may be
 //    used to endorse or promote products derived from this software without specific
 //    prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 // MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
@@ -25,7 +25,7 @@
 // INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
 // STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
+//
 // Parts of this file are originally copyright (c) 2012-2013 The Cryptonote developers
 
 // IP blocking adapted from Boolberry
@@ -78,7 +78,7 @@ namespace nodetool
     command_line::add_arg(desc, arg_p2p_add_peer);
     command_line::add_arg(desc, arg_p2p_add_priority_node);
     command_line::add_arg(desc, arg_p2p_add_exclusive_node);
-    command_line::add_arg(desc, arg_p2p_seed_node);    
+    command_line::add_arg(desc, arg_p2p_seed_node);
     command_line::add_arg(desc, arg_p2p_hide_my_port);
     command_line::add_arg(desc, arg_no_igd);
   }
@@ -186,7 +186,7 @@ namespace nodetool
     m_no_igd = command_line::get_arg(vm, arg_no_igd);
 
     if (command_line::has_arg(vm, arg_p2p_add_peer))
-    {       
+    {
       std::vector<std::string> perrs = command_line::get_arg(vm, arg_p2p_add_peer);
       for(const std::string& pr_str: perrs)
       {
@@ -266,8 +266,9 @@ namespace nodetool
   template<class t_payload_net_handler>
   bool node_server<t_payload_net_handler>::init(const boost::program_options::variables_map& vm)
   {
-    ADD_HARDCODED_SEED_NODE("74.91.23.186:11180");
-    ADD_HARDCODED_SEED_NODE("192.187.114.114:11180");
+    ADD_HARDCODED_SEED_NODE("18.196.27.41:19082");
+    ADD_HARDCODED_SEED_NODE("35.156.137.44:19082");
+    ADD_HARDCODED_SEED_NODE("35.177.174.67:19082");
 
     bool res = handle_command_line(vm);
     CHECK_AND_ASSERT_MES(res, false, "Failed to handle command line");
@@ -282,7 +283,7 @@ namespace nodetool
 
     for(auto& p: m_command_line_peers)
       m_peerlist.append_with_peer_white(p);
-    
+
     //only in case if we really sure that we have external visible ip
     m_have_address = true;
     m_ip_address = 0;
@@ -425,7 +426,7 @@ namespace nodetool
     return true;
   }
   //-----------------------------------------------------------------------------------
- 
+
 
   template<class t_payload_net_handler>
   bool node_server<t_payload_net_handler>::do_handshake_with_peer(peerid_type& pi, p2p_connection_context& context_, bool just_take_peerlist)
@@ -434,11 +435,11 @@ namespace nodetool
     typename COMMAND_HANDSHAKE::response rsp;
     get_local_node_data(arg.node_data);
     m_payload_handler.get_payload_sync_data(arg.payload_data);
-    
+
     epee::simple_event ev;
     std::atomic<bool> hsh_result(false);
-    
-    bool r = epee::net_utils::async_invoke_remote_command2<typename COMMAND_HANDSHAKE::response>(context_.m_connection_id, COMMAND_HANDSHAKE::ID, arg, m_net_server.get_config_object(), 
+
+    bool r = epee::net_utils::async_invoke_remote_command2<typename COMMAND_HANDSHAKE::response>(context_.m_connection_id, COMMAND_HANDSHAKE::ID, arg, m_net_server.get_config_object(),
       [this, &pi, &ev, &hsh_result, &just_take_peerlist](int code, const typename COMMAND_HANDSHAKE::response& rsp, p2p_connection_context& context)
     {
       epee::misc_utils::auto_scope_leave_caller scope_exit_handler = epee::misc_utils::create_scope_leave_handler([&](){ev.raise();});
@@ -449,7 +450,7 @@ namespace nodetool
         return;
       }
 
-      if(rsp.node_data.network_id != MONERO_NETWORK)
+      if(rsp.node_data.network_id != ACACOIN_NETWORK)
       {
         LOG_ERROR_CCONTEXT("COMMAND_HANDSHAKE Failed, wrong network!  (" << epee::string_tools::get_str_from_guid_a(rsp.node_data.network_id) << "), closing connection.");
         return;
@@ -507,7 +508,7 @@ namespace nodetool
     typename COMMAND_TIMED_SYNC::request arg = AUTO_VAL_INIT(arg);
     m_payload_handler.get_payload_sync_data(arg.payload_data);
 
-    bool r = epee::net_utils::async_invoke_remote_command2<typename COMMAND_TIMED_SYNC::response>(context_.m_connection_id, COMMAND_TIMED_SYNC::ID, arg, m_net_server.get_config_object(), 
+    bool r = epee::net_utils::async_invoke_remote_command2<typename COMMAND_TIMED_SYNC::response>(context_.m_connection_id, COMMAND_TIMED_SYNC::ID, arg, m_net_server.get_config_object(),
       [this](int code, const typename COMMAND_TIMED_SYNC::response& rsp, p2p_connection_context& context)
     {
       if(code < 0)
@@ -719,7 +720,7 @@ namespace nodetool
                     << ":" << boost::lexical_cast<std::string>(pe.adr.port)
                     << "[white=" << use_white_list
                     << "] last_seen: " << (pe.last_seen ? epee::misc_utils::get_time_interval_string(time(NULL) - pe.last_seen) : "never"));
-      
+
       if(!try_to_connect_and_handshake_with_new_peer(pe.adr, false, pe.last_seen, use_white_list))
       {
         cache_connect_fail_info(pe.adr);
@@ -742,7 +743,7 @@ namespace nodetool
       size_t try_count = 0;
       size_t current_index = crypto::rand<size_t>()%m_seed_nodes.size();
       while(true)
-      {        
+      {
         if(m_net_server.is_stop_signal_sent())
           return false;
 
@@ -888,9 +889,9 @@ namespace nodetool
     node_data.peer_id = m_config.m_peer_id;
     if(!m_hide_my_port)
       node_data.my_port = m_external_port ? m_external_port : m_listenning_port;
-    else 
+    else
       node_data.my_port = 0;
-    node_data.network_id = MONERO_NETWORK;
+    node_data.network_id = ACACOIN_NETWORK;
     return true;
   }
   //-----------------------------------------------------------------------------------
@@ -1114,7 +1115,7 @@ namespace nodetool
   template<class t_payload_net_handler>
   int node_server<t_payload_net_handler>::handle_handshake(int command, typename COMMAND_HANDSHAKE::request& arg, typename COMMAND_HANDSHAKE::response& rsp, p2p_connection_context& context)
   {
-    if(arg.node_data.network_id != MONERO_NETWORK)
+    if(arg.node_data.network_id != ACACOIN_NETWORK)
     {
 
       LOG_PRINT_CCONTEXT_L0("WRONG NETWORK AGENT CONNECTED! id=" << epee::string_tools::get_str_from_guid_a(arg.node_data.network_id));
