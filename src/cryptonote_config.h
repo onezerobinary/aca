@@ -30,12 +30,12 @@
 
 #pragma once
 
-#define HARDFORK_1_HEIGHT                               592000
-#define HARDFORK_1_OLD_TARGET                           60
-#define HARDFORK_1_OLD_SPEED_FACTOR                     (20)
-#define HARDFORK_1_POW_SPEED_MULTIPLIER                 2
-#define HARDFORK_1_DIFFADJ                              HARDFORK_1_POW_SPEED_MULTIPLIER
-#define HARDFORK_1_DIFFADJ_WINDOW                       360
+// #define HARDFORK_1_HEIGHT                               592000
+// #define HARDFORK_1_OLD_TARGET                           60
+// #define HARDFORK_1_OLD_SPEED_FACTOR                     (20)
+// #define HARDFORK_1_POW_SPEED_MULTIPLIER                 2
+// #define HARDFORK_1_DIFFADJ                              HARDFORK_1_POW_SPEED_MULTIPLIER
+// #define HARDFORK_1_DIFFADJ_WINDOW                       360
 
 #define CRYPTONOTE_MAX_BLOCK_NUMBER                     500000000
 #define CRYPTONOTE_MAX_BLOCK_SIZE                       500000000  // block header blob limit, never used!
@@ -114,6 +114,7 @@
 #define ALLOW_DEBUG_COMMANDS
 
 #define CRYPTONOTE_NAME                         "acacoin"
+#define GENESIS_TX                              ""
 #define CRYPTONOTE_POOLDATA_FILENAME            "poolstate.bin"
 #define CRYPTONOTE_BLOCKCHAINDATA_FILENAME      "blockchain.bin"
 #define CRYPTONOTE_BLOCKCHAINDATA_TEMP_FILENAME "blockchain.bin.tmp"

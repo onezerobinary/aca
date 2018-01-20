@@ -1,21 +1,21 @@
 // Copyright (c) 2014, AEON, The Monero Project
-// 
+//
 // All rights reserved.
-// 
+//
 // Redistribution and use in source and binary forms, with or without modification, are
 // permitted provided that the following conditions are met:
-// 
+//
 // 1. Redistributions of source code must retain the above copyright notice, this list of
 //    conditions and the following disclaimer.
-// 
+//
 // 2. Redistributions in binary form must reproduce the above copyright notice, this list
 //    of conditions and the following disclaimer in the documentation and/or other
 //    materials provided with the distribution.
-// 
+//
 // 3. Neither the name of the copyright holder nor the names of its contributors may be
 //    used to endorse or promote products derived from this software without specific
 //    prior written permission.
-// 
+//
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 // MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
@@ -25,7 +25,7 @@
 // INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
 // STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 // THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-// 
+//
 // Parts of this file are originally copyright (c) 2012-2013 The Cryptonote developers
 
 #pragma once
@@ -113,10 +113,10 @@ private:
   //--------------------------------------------------------------------------------
   bool show_hr(const std::vector<std::string>& args)
   {
-	if(!m_srv.get_payload_object().get_core().get_miner().is_mining()) 
+	if(!m_srv.get_payload_object().get_core().get_miner().is_mining())
 	{
 	  std::cout << "Mining is not started. You need start mining before you can see hash rate." << ENDL;
-	} else 
+	} else
 	{
 	  m_srv.get_payload_object().get_core().get_miner().do_print_hashrate(true);
 	}
@@ -134,11 +134,11 @@ private:
 	  cryptonote::difficulty_type difficulty = m_srv.get_payload_object().get_core().get_blockchain_storage().get_difficulty_for_next_block();
 	  uint64_t height = m_srv.get_payload_object().get_core().get_blockchain_storage().get_current_blockchain_height();
 
-	  LOG_PRINT_GREEN("BH: " << height << ", DIFF: " << difficulty 
-			  << ", HR: " << (uint64_t) difficulty / (height < HARDFORK_1_HEIGHT ? HARDFORK_1_OLD_TARGET : DIFFICULTY_TARGET) << " H/s", LOG_LEVEL_0);
+	  LOG_PRINT_GREEN("BH: " << height << ", DIFF: " << difficulty
+			  << ", HR: " << (uint64_t) difficulty / (DIFFICULTY_TARGET) << " H/s", LOG_LEVEL_0);
 
 	  return true;
-  } 
+  }
   //--------------------------------------------------------------------------------
   bool print_bc_outs(const std::vector<std::string>& args)
   {
